@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Three Regions — California &middot; Guangdong &middot; Nigeria</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&family=Noto+Serif+SC:wght@300;400;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f0e8;
+  --bg2: #ece5d8;
+  --bg3: #e3dbd0;
+  --ink: #1c1917;
+  --ink2: #3a3530;
+  --dim: #8a8078;
+  --ca: #d98a2b;
+  --ca-bg: rgba(217,138,43,.08);
+  --ca-border: rgba(217,138,43,.2);
+  --gd: #c44536;
+  --gd-bg: rgba(196,69,54,.07);
+  --gd-border: rgba(196,69,54,.18);
+  --ng: #2d8a4e;
+  --ng-bg: rgba(45,138,78,.07);
+  --ng-border: rgba(45,138,78,.18);
+  --rule: rgba(28,25,23,.08);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Source Sans 3',sans-serif;
+  font-weight:300;
+  line-height:1.8;
+  overflow-x:hidden;
+}
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+  opacity:.018;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:300px;
+}
+
+.cn{font-family:'Noto Serif SC',serif;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+h1,h2,h3{font-family:'Libre Baskerville',serif;font-weight:400;line-height:1.3;}
+a{color:var(--ca);text-decoration:none;}
+
+/* ── Reveal ── */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
+.rv.vis{opacity:1;transform:translateY(0);}
+.rv.d1{transition-delay:.1s;}.rv.d2{transition-delay:.22s;}.rv.d3{transition-delay:.36s;}
+.rv.d4{transition-delay:.5s;}.rv.d5{transition-delay:.64s;}
+
+/* ═══ STICKY NAV ═══ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  background:rgba(245,240,232,.85);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--rule);
+  padding:0 32px;
+  display:flex;align-items:center;justify-content:space-between;
+  height:52px;
+  font-size:.75rem;letter-spacing:.08em;
+  transition:transform .3s;
+}
+nav.hidden{transform:translateY(-100%);}
+.nav-title{font-family:'Libre Baskerville',serif;font-size:.85rem;font-weight:700;color:var(--ink);}
+.nav-links{display:flex;gap:20px;}
+.nav-links a{color:var(--dim);text-transform:uppercase;letter-spacing:.12em;font-weight:600;font-size:.65rem;transition:color .2s;}
+.nav-links a:hover{color:var(--ink);}
+.nav-links a.active{color:var(--ink);border-bottom:2px solid var(--ca);}
+@media(max-width:700px){.nav-links{display:none;}}
+
+/* ═══ HERO ═══ */
+#hero{
+  min-height:100vh;display:flex;flex-direction:column;
+  justify-content:center;align-items:center;text-align:center;
+  padding:120px 40px 80px;position:relative;overflow:hidden;
+}
+.hero-venn{position:relative;width:320px;height:280px;margin-bottom:40px;}
+.hero-circle{
+  position:absolute;width:160px;height:160px;border-radius:50%;
+  opacity:.15;mix-blend-mode:multiply;
+  animation:gentlePulse 4s ease-in-out infinite;
+}
+.hero-circle.c1{background:var(--ca);left:20px;top:0;animation-delay:0s;}
+.hero-circle.c2{background:var(--gd);right:20px;top:0;animation-delay:1.3s;}
+.hero-circle.c3{background:var(--ng);left:50%;transform:translateX(-50%);bottom:0;animation-delay:2.6s;}
+@keyframes gentlePulse{0%,100%{transform:scale(1);}50%{transform:scale(1.06);}}
+.hero-circle.c3{animation-name:gentlePulse3;}
+@keyframes gentlePulse3{0%,100%{transform:translateX(-50%) scale(1);}50%{transform:translateX(-50%) scale(1.06);}}
+
+.hero-labels{position:absolute;inset:0;}
+.hero-lbl{
+  position:absolute;font-family:'Libre Baskerville',serif;
+  font-size:.8rem;letter-spacing:.1em;font-weight:700;
+}
+.hero-lbl.l1{left:30px;top:65px;color:var(--ca);}
+.hero-lbl.l2{right:25px;top:65px;color:var(--gd);}
+.hero-lbl.l3{left:50%;transform:translateX(-50%);bottom:55px;color:var(--ng);}
+
+h1.hero-title{
+  font-size:clamp(2.2rem,5vw,3.8rem);
+  letter-spacing:-.02em;
+  margin-bottom:.6rem;
+}
+.hero-title-cn{
+  font-family:'Noto Serif SC',serif;
+  font-size:clamp(1.2rem,2.5vw,1.8rem);
+  font-weight:300;
+  color:var(--dim);
+  margin-bottom:1.5rem;
+}
+.hero-desc{max-width:580px;color:var(--ink2);font-size:1rem;}
+
+/* ═══ SECTIONS ═══ */
+section{padding:100px 40px;max-width:1160px;margin:0 auto;}
+@media(max-width:700px){section{padding:60px 20px;}}
+
+.section-rule{height:1px;background:var(--rule);max-width:1160px;margin:0 auto;}
+.section-label{
+  font-family:'IBM Plex Mono',monospace;font-size:.65rem;
+  letter-spacing:.25em;text-transform:uppercase;color:var(--dim);
+  margin-bottom:1rem;
+}
+
+h2{font-size:clamp(1.6rem,3vw,2.4rem);margin-bottom:.4rem;}
+.h2-cn{font-family:'Noto Serif SC',serif;font-weight:300;font-size:clamp(1rem,2vw,1.35rem);color:var(--dim);margin-bottom:1.5rem;}
+
+/* ═══ THREE-COL CARDS ═══ */
+.tri{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:36px;}
+@media(max-width:900px){.tri{grid-template-columns:1fr;}}
+
+.tri-card{
+  padding:32px 28px;border-radius:14px;
+  border:1px solid;position:relative;overflow:hidden;
+  transition:transform .3s,box-shadow .3s;
+}
+.tri-card:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.06);}
+.tri-card.ca{background:var(--ca-bg);border-color:var(--ca-border);}
+.tri-card.gd{background:var(--gd-bg);border-color:var(--gd-border);}
+.tri-card.ng{background:var(--ng-bg);border-color:var(--ng-border);}
+
+.tri-card .region-tag{
+  font-family:'IBM Plex Mono',monospace;font-size:.6rem;
+  letter-spacing:.15em;text-transform:uppercase;
+  padding:3px 10px;border-radius:4px;display:inline-block;margin-bottom:14px;
+  font-weight:500;
+}
+.ca .region-tag{background:rgba(217,138,43,.12);color:var(--ca);}
+.gd .region-tag{background:rgba(196,69,54,.1);color:var(--gd);}
+.ng .region-tag{background:rgba(45,138,78,.1);color:var(--ng);}
+
+.tri-card h3{font-size:1.15rem;margin-bottom:.5rem;}
+.tri-card p{font-size:.88rem;color:var(--ink2);line-height:1.75;}
+.tri-card .cn-text{font-family:'Noto Serif SC',serif;font-size:.82rem;color:var(--dim);margin-top:.8rem;line-height:1.85;}
+
+/* ═══ COMPARISON TABLE ═══ */
+.comp-table{
+  width:100%;border-collapse:collapse;margin-top:32px;
+  font-size:.85rem;
+}
+.comp-table th,.comp-table td{
+  padding:14px 18px;text-align:left;
+  border-bottom:1px solid var(--rule);
+  vertical-align:top;
+}
+.comp-table th{
+  font-family:'IBM Plex Mono',monospace;font-size:.65rem;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--dim);
+  font-weight:500;background:var(--bg2);
+  position:sticky;top:52px;z-index:10;
+}
+.comp-table td{line-height:1.7;}
+.comp-table .metric{font-weight:600;color:var(--ink);white-space:nowrap;}
+.comp-table .cn-sub{font-family:'Noto Serif SC',serif;font-size:.75rem;color:var(--dim);display:block;margin-top:2px;}
+.comp-table tr:hover td{background:rgba(0,0,0,.015);}
+.col-ca{color:var(--ca);font-weight:600;}
+.col-gd{color:var(--gd);font-weight:600;}
+.col-ng{color:var(--ng);font-weight:600;}
+
+@media(max-width:700px){
+  .comp-table{font-size:.75rem;}
+  .comp-table th,.comp-table td{padding:10px 10px;}
+}
+
+/* ═══ BAR CHART ═══ */
+.bar-section{margin-top:40px;}
+.bar-row{
+  display:flex;align-items:center;gap:14px;
+  padding:10px 0;border-bottom:1px solid var(--rule);
+}
+.bar-label{width:120px;flex-shrink:0;font-size:.78rem;font-weight:600;text-align:right;}
+.bar-label .cn-sub{font-family:'Noto Serif SC',serif;font-size:.68rem;color:var(--dim);font-weight:300;display:block;}
+.bar-tracks{flex:1;display:flex;flex-direction:column;gap:4px;}
+.bar-track{display:flex;align-items:center;gap:8px;}
+.bar-fill{
+  height:16px;border-radius:3px;
+  transition:width 1.4s cubic-bezier(.22,1,.36,1);
+  width:0;position:relative;
+}
+.bar-fill.ca{background:linear-gradient(90deg,rgba(217,138,43,.3),var(--ca));}
+.bar-fill.gd{background:linear-gradient(90deg,rgba(196,69,54,.3),var(--gd));}
+.bar-fill.ng{background:linear-gradient(90deg,rgba(45,138,78,.3),var(--ng));}
+.bar-val{font-size:.68rem;color:var(--dim);font-family:'IBM Plex Mono',monospace;white-space:nowrap;}
+
+/* ═══ CONNECTIONS ═══ */
+.conn-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:36px;}
+@media(max-width:800px){.conn-grid{grid-template-columns:1fr;}}
+.conn-card{
+  padding:28px 24px;border-radius:12px;
+  background:var(--bg2);border:1px solid var(--rule);
+  transition:box-shadow .3s;
+}
+.conn-card:hover{box-shadow:0 8px 30px rgba(0,0,0,.05);}
+.conn-dots{display:flex;gap:6px;margin-bottom:12px;}
+.conn-dot{width:10px;height:10px;border-radius:50%;}
+.conn-dot.ca{background:var(--ca);}.conn-dot.gd{background:var(--gd);}.conn-dot.ng{background:var(--ng);}
+.conn-card h3{font-size:1rem;margin-bottom:.4rem;}
+.conn-card p{font-size:.85rem;color:var(--ink2);}
+.conn-card .cn-text{font-family:'Noto Serif SC',serif;font-size:.78rem;color:var(--dim);margin-top:.6rem;line-height:1.8;}
+
+/* ═══ CULTURAL MOSAIC ═══ */
+.mosaic{
+  display:grid;grid-template-columns:repeat(6,1fr);
+  gap:3px;margin-top:36px;border-radius:12px;overflow:hidden;
+}
+@media(max-width:700px){.mosaic{grid-template-columns:repeat(3,1fr);}}
+.mosaic-tile{
+  aspect-ratio:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;
+  padding:12px 8px;font-size:.72rem;color:#fff;position:relative;
+  transition:transform .3s;cursor:default;
+}
+.mosaic-tile:hover{transform:scale(1.05);z-index:2;}
+.mosaic-tile .emoji{font-size:1.6rem;margin-bottom:6px;}
+.mosaic-tile .tile-label{font-weight:600;font-size:.65rem;letter-spacing:.04em;}
+.mosaic-tile.ca{background:var(--ca);}.mosaic-tile.gd{background:var(--gd);}.mosaic-tile.ng{background:var(--ng);}
+.mosaic-tile.ca-l{background:rgba(217,138,43,.75);}
+.mosaic-tile.gd-l{background:rgba(196,69,54,.75);}
+.mosaic-tile.ng-l{background:rgba(45,138,78,.75);}
+
+/* ═══ TIMELINE ═══ */
+.history-tl{margin-top:40px;position:relative;padding-left:140px;}
+@media(max-width:700px){.history-tl{padding-left:0;}}
+.tl-row{
+  display:flex;align-items:flex-start;gap:20px;
+  padding:20px 0;border-bottom:1px solid var(--rule);position:relative;
+}
+.tl-year{
+  position:absolute;left:-140px;
+  font-family:'Libre Baskerville',serif;font-size:1.1rem;
+  color:var(--dim);width:120px;text-align:right;padding-top:2px;
+}
+@media(max-width:700px){.tl-year{position:static;width:auto;text-align:left;margin-bottom:4px;}}
+.tl-dots{display:flex;gap:4px;padding-top:6px;flex-shrink:0;}
+.tl-content{flex:1;}
+.tl-content strong{font-weight:600;}
+.tl-content p{font-size:.85rem;color:var(--ink2);margin-top:2px;}
+.tl-content .cn-text{font-family:'Noto Serif SC',serif;font-size:.78rem;color:var(--dim);margin-top:4px;}
+
+/* ═══ FOOTER ═══ */
+footer{
+  text-align:center;padding:60px 40px;
+  border-top:1px solid var(--rule);max-width:1160px;margin:0 auto;
+}
+footer .three-dots{display:flex;gap:8px;justify-content:center;margin-bottom:16px;}
+footer p{font-size:.78rem;color:var(--dim);}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav id="mainNav">
+  <div class="nav-title">Three Regions</div>
+  <div class="nav-links" id="navLinks">
+    <a href="#overview" data-sec="overview">Overview</a>
+    <a href="#tech" data-sec="tech">Tech</a>
+    <a href="#industry" data-sec="industry">Industry</a>
+    <a href="#life" data-sec="life">Lifestyle</a>
+    <a href="#cost" data-sec="cost">Cost</a>
+    <a href="#history" data-sec="history">History</a>
+    <a href="#culture" data-sec="culture">Culture</a>
+    <a href="#connections" data-sec="connections">Links</a>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section id="hero">
+  <div class="hero-venn rv">
+    <div class="hero-circle c1"></div>
+    <div class="hero-circle c2"></div>
+    <div class="hero-circle c3"></div>
+    <div class="hero-labels">
+      <span class="hero-lbl l1">California</span>
+      <span class="hero-lbl l2">Guangdong</span>
+      <span class="hero-lbl l3">Nigeria</span>
+    </div>
+  </div>
+  <h1 class="hero-title rv d1">Three Worlds, One Conversation</h1>
+  <div class="hero-title-cn rv d2 cn">三域对话：加州 &middot; 广东 &middot; 尼日利亚</div>
+  <p class="hero-desc rv d3">
+    A panoramic comparison of three dynamic regions &mdash; from Silicon Valley to the Pearl River Delta to Lagos &mdash;
+    exploring technology, industry, lifestyle, cost of living, history, culture, and the threads that connect them.
+  </p>
+  <p class="hero-desc rv d4 cn" style="color:var(--dim);margin-top:.8rem;font-size:.9rem;">
+    全景对比三大活力区域——从硅谷到珠三角到拉各斯——探索科技、产业、生活方式、生活成本、历史、文化，以及连接它们的纽带。
+  </p>
+</section>
+
+<div class="section-rule"></div>
+
+<!-- ═══ OVERVIEW ═══ -->
+<section id="overview">
+  <div class="section-label rv">01 &mdash; Overview 概览</div>
+  <h2 class="rv d1">At a Glance</h2>
+  <div class="h2-cn rv d2">一览全局</div>
+
+  <div class="rv d3" style="overflow-x:auto;">
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th>Metric 指标</th>
+        <th style="color:var(--ca);">California 加州</th>
+        <th style="color:var(--gd);">Guangdong 广东<br><span style="font-size:.55rem;opacity:.6;">incl. HK &amp; Macau 含港澳</span></th>
+        <th style="color:var(--ng);">Nigeria 尼日利亚</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="metric">Population<span class="cn-sub">人口</span></td>
+        <td>~39 million</td>
+        <td>~134 million (GD) + 7.5M (HK) + 0.7M (Macau)</td>
+        <td>~230 million</td>
+      </tr>
+      <tr>
+        <td class="metric">Area<span class="cn-sub">面积</span></td>
+        <td>423,970 km&sup2;</td>
+        <td>179,800 km&sup2; (GD+HK+Macau)</td>
+        <td>923,769 km&sup2;</td>
+      </tr>
+      <tr>
+        <td class="metric">GDP<span class="cn-sub">生产总值</span></td>
+        <td>~$4.1 trillion</td>
+        <td>~$2.1 trillion (GD+HK+Macau)</td>
+        <td>~$475 billion</td>
+      </tr>
+      <tr>
+        <td class="metric">GDP per Capita<span class="cn-sub">人均GDP</span></td>
+        <td>~$105,000</td>
+        <td>~$15,000 (GD) / $50,000 (HK)</td>
+        <td>~$2,100</td>
+      </tr>
+      <tr>
+        <td class="metric">Key Cities<span class="cn-sub">核心城市</span></td>
+        <td>Los Angeles, San Francisco, San Jose, San Diego</td>
+        <td>Guangzhou, Shenzhen, Hong Kong, Macau, Dongguan, Foshan</td>
+        <td>Lagos, Abuja, Kano, Port Harcourt, Ibadan</td>
+      </tr>
+      <tr>
+        <td class="metric">Climate<span class="cn-sub">气候</span></td>
+        <td>Mediterranean; arid south, temperate north</td>
+        <td>Subtropical monsoon; hot, humid summers</td>
+        <td>Tropical; rainy south, semi-arid north</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<div class="section-rule"></div>
+
+<!-- ═══ TECHNOLOGY ═══ -->
+<section id="tech">
+  <div class="section-label rv">02 &mdash; Technology 科技</div>
+  <h2 class="rv d1">Innovation Ecosystems</h2>
+  <div class="h2-cn rv d2">创新生态</div>
+
+  <div class="tri">
+    <div class="tri-card ca rv">
+      <span class="region-tag">California 加州</span>
+      <h3>The Global Innovation Capital</h3>
+      <p>Home to Silicon Valley, the world's densest concentration of tech giants and startups. Apple, Google, Meta, OpenAI, and thousands of VC-backed startups drive AI, cloud computing, biotech, and clean energy.</p>
+      <p>Stanford and UC Berkeley fuel a continuous pipeline of talent and research.</p>
+      <div class="cn-text">硅谷是全球创新之都，苹果、谷歌、Meta、OpenAI等科技巨头和数千家风投支持的初创企业在此推动AI、云计算、生物技术和清洁能源的发展。斯坦福和伯克利持续输送人才和研究成果。</div>
+    </div>
+    <div class="tri-card gd rv d1">
+      <span class="region-tag">Guangdong 广东</span>
+      <h3>The Hardware &amp; Manufacturing Powerhouse</h3>
+      <p>Shenzhen is the world's hardware capital &mdash; Huawei, Tencent, BYD, and DJI are headquartered here. The Pearl River Delta is the planet's densest manufacturing cluster, producing most of the world's electronics.</p>
+      <p>Hong Kong adds world-class finance and international connectivity. The Greater Bay Area initiative aims to rival Silicon Valley.</p>
+      <div class="cn-text">深圳是全球硬件之都——华为、腾讯、比亚迪、大疆总部所在地。珠三角是全球最密集的制造业集群，生产了世界大部分电子产品。香港提供世界级金融和国际连接。粤港澳大湾区计划对标硅谷。</div>
+    </div>
+    <div class="tri-card ng rv d2">
+      <span class="region-tag">Nigeria 尼日利亚</span>
+      <h3>Africa's Emerging Tech Giant</h3>
+      <p>Lagos is "Africa's Silicon Valley" &mdash; home to Flutterwave, Paystack (acquired by Stripe), and Andela. Fintech leads the charge, solving real problems: mobile payments leapfrog traditional banking for 60M+ unbanked citizens.</p>
+      <p>A young, hungry population (median age ~18) is building the continent's digital future.</p>
+      <div class="cn-text">拉各斯是"非洲硅谷"——Flutterwave、Paystack（被Stripe收购）和Andela的所在地。金融科技引领发展，为超过6000万无银行账户的公民提供移动支付。年轻人口（中位年龄约18岁）正在构建非洲的数字未来。</div>
+    </div>
+  </div>
+
+  <div class="bar-section rv d3" id="techBars">
+    <div class="bar-row">
+      <div class="bar-label">R&D Spend<span class="cn-sub">研发投入</span></div>
+      <div class="bar-tracks">
+        <div class="bar-track"><div class="bar-fill ca" data-w="95"></div><span class="bar-val">~$230B</span></div>
+        <div class="bar-track"><div class="bar-fill gd" data-w="65"></div><span class="bar-val">~$75B</span></div>
+        <div class="bar-track"><div class="bar-fill ng" data-w="5"></div><span class="bar-val">~$1.5B</span></div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Unicorns<span class="cn-sub">独角兽企业</span></div>
+      <div class="bar-tracks">
+        <div class="bar-track"><div class="bar-fill ca" data-w="92"></div><span class="bar-val">~490</span></div>
+        <div class="bar-track"><div class="bar-fill gd" data-w="35"></div><span class="bar-val">~50</span></div>
+        <div class="bar-track"><div class="bar-fill ng" data-w="6"></div><span class="bar-val">~7</span></div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Internet Users<span class="cn-sub">互联网用户</span></div>
+      <div class="bar-tracks">
+        <div class="bar-track"><div class="bar-fill ca" data-w="38"></div><span class="bar-val">~37M</span></div>
+        <div class="bar-track"><div class="bar-fill gd" data-w="90"></div><span class="bar-val">~128M</span></div>
+        <div class="bar-track"><div class="bar-fill ng" data-w="80"></div><span class="bar-val">~110M</span></div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">5G Coverage<span class="cn-sub">5G覆盖率</span></div>
+      <div class="bar-tracks">
+        <div class="bar-track"><div class="bar-fill ca" data-w="75"></div><span class="bar-val">~75%</span></div>
+        <div class="bar-track"><div class="bar-fill gd" data-w="90"></div><span class="bar-val">~90%</span></div>
+        <div class="bar-track"><div class="bar-fill ng" data-w="8"></div><span class="bar-val">~8%</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-rule"></div>
+
+<!-- ═══ INDUSTRY ═══ -->
+<section id="industry">
+  <div class="section-label rv">03 &mdash; Industry 产业</div>
+  <h2 class="rv d1">Economic Engines</h2>
+  <div class="h2-cn rv d2">经济引擎</div>
+
+  <div class="tri">
+    <div class="tri-card ca rv">
+      <span class="region-tag">California 加州</span>
+      <h3>Diverse &amp; Services-Led</h3>
+      <p>Tech dominates, but California's economy spans Hollywood entertainment, aerospace (SpaceX, JPL), agriculture (America's #1 farm state), biotech, tourism, and the world's busiest Pacific ports.</p>
+      <div class="cn-text">科技主导，但加州经济还涵盖好莱坞娱乐、航空航天（SpaceX、JPL）、农业（全美第一农业州）、生物技术、旅游业和太平洋最繁忙的港口。</div>
+    </div>
+    <div class="tri-card gd rv d1">
+      <span class="region-tag">Guangdong 广东</span>
+      <h3>The World's Factory Floor</h3>
+      <p>Guangdong produces 1/3 of China's exports. Shenzhen leads in tech hardware and EVs, Dongguan in electronics assembly, Foshan in ceramics and appliances, and Guangzhou in autos and trade. Hong Kong remains Asia's premier financial hub. Macau's gaming industry generates more revenue than Las Vegas.</p>
+      <div class="cn-text">广东出口占全国1/3。深圳领先科技硬件和电动车，东莞电子组装，佛山陶瓷和家电，广州汽车和贸易。香港仍是亚洲首要金融中心。澳门博彩收入超过拉斯维加斯。</div>
+    </div>
+    <div class="tri-card ng rv d2">
+      <span class="region-tag">Nigeria 尼日利亚</span>
+      <h3>Oil, Agriculture &amp; the Nollywood Machine</h3>
+      <p>Africa's largest oil producer, but diversifying fast. Agriculture employs ~35% of the workforce. Nollywood is the world's second-largest film industry by volume. Lagos is becoming a continental hub for finance, fashion, and creative industries.</p>
+      <div class="cn-text">非洲最大石油生产国，但正在快速多元化。农业雇佣约35%劳动力。诺莱坞是全球产量第二的电影产业。拉各斯正成为非洲大陆的金融、时尚和创意产业中心。</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-rule"></div>
+
+<!-- ═══ LIFESTYLE ═══ -->
+<section id="life">
+  <div class="section-label rv">04 &mdash; Lifestyle 生活方式</div>
+  <h2 class="rv d1">How People Live</h2>
+  <div class="h2-cn rv d2">三地的生活图景</div>
+
+  <div class="tri">
+    <div class="tri-card ca rv">
+      <span class="region-tag">California 加州</span>
+      <h3>The Outdoor Dream</h3>
+      <p>Beach culture, hiking, farm-to-table dining, and wellness obsession. Car-dependent sprawl defines most cities, but urban cores are densifying. Diverse immigrant communities create a fusion food and cultural scene unmatched globally.</p>
+      <div class="cn-text">沙滩文化、徒步旅行、农场到餐桌的饮食和健康生活。汽车依赖的城市扩张定义了大多数城市，但城市核心正在高密度化。多元移民社区创造了全球无与伦比的融合美食和文化场景。</div>
+    </div>
+    <div class="tri-card gd rv d1">
+      <span class="region-tag">Guangdong 广东</span>
+      <h3>Fast-Paced &amp; Food-Obsessed</h3>
+      <p>Cantonese cuisine is arguably China's finest &mdash; dim sum, roast goose, wonton noodles. Life moves fast in Shenzhen's tech corridors but slows down in traditional teahouses. Hong Kong blends British-era traditions with Cantonese street life. WeChat and Alipay are the fabric of daily transactions.</p>
+      <div class="cn-text">粤菜堪称中国最精致的菜系——点心、烧鹅、云吞面。深圳科技走廊的生活节奏极快，但在传统茶楼中又慢了下来。香港融合了英治时期传统和粤式街头生活。微信和支付宝是日常交易的基础。</div>
+    </div>
+    <div class="tri-card ng rv d2">
+      <span class="region-tag">Nigeria 尼日利亚</span>
+      <h3>Vibrant, Social &amp; Resilient</h3>
+      <p>Life revolves around community, music (Afrobeats is a global phenomenon), and hustle. Lagos is chaotic, energetic, and endlessly creative. Jollof rice is a national treasure. Religious life &mdash; both Christian and Muslim &mdash; shapes daily rhythms. Despite infrastructure challenges, the entrepreneurial spirit is extraordinary.</p>
+      <div class="cn-text">生活围绕社区、音乐（Afrobeats已成为全球现象）和奋斗展开。拉各斯混乱、充满活力且极具创造力。Jollof饭是国宝。宗教生活——基督教和伊斯兰教——塑造了日常节奏。尽管基础设施面临挑战，创业精神非凡。</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-rule"></div>
+
+<!-- ═══ COST OF LIVING ═══ -->
+<section id="cost">
+  <div class="section-label rv">05 &mdash; Cost of Living 生活成本</div>
+  <h2 class="rv d1">What It Costs to Live</h2>
+  <div class="h2-cn rv d2">生活的价格</div>
+
+  <div class="rv d3" style="overflow-x:auto;">
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th>Item 项目</th>
+        <th style="color:var(--ca);">California 加州</th>
+        <th style="color:var(--gd);">Guangdong 广东</th>
+        <th style="color:var(--ng);">Nigeria 尼日利亚</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="metric">1BR Rent (City Center)<span class="cn-sub">市中心一居室租金/月</span></td>
+        <td><span class="col-ca">$2,500&ndash;$3,800</span><br>SF/LA average</td>
+        <td><span class="col-gd">$600&ndash;$1,500</span><br>Shenzhen/HK range</td>
+        <td><span class="col-ng">$200&ndash;$600</span><br>Lagos range</td>
+      </tr>
+      <tr>
+        <td class="metric">Meal (Mid-Range)<span class="cn-sub">中档餐厅一餐</span></td>
+        <td><span class="col-ca">$25&ndash;$50</span></td>
+        <td><span class="col-gd">$8&ndash;$25</span></td>
+        <td><span class="col-ng">$3&ndash;$15</span></td>
+      </tr>
+      <tr>
+        <td class="metric">Monthly Transit<span class="cn-sub">月交通费</span></td>
+        <td><span class="col-ca">$100&ndash;$300</span><br>Gas-dependent</td>
+        <td><span class="col-gd">$30&ndash;$80</span><br>Metro + bus</td>
+        <td><span class="col-ng">$20&ndash;$60</span><br>Buses + okada</td>
+      </tr>
+      <tr>
+        <td class="metric">Avg. Monthly Salary<span class="cn-sub">平均月薪</span></td>
+        <td><span class="col-ca">$6,500</span></td>
+        <td><span class="col-gd">$1,200</span> (GD) / <span class="col-gd">$3,500</span> (HK)</td>
+        <td><span class="col-ng">$150&ndash;$400</span></td>
+      </tr>
+      <tr>
+        <td class="metric">Home Price / m&sup2;<span class="cn-sub">房价/平方米</span></td>
+        <td><span class="col-ca">$6,000&ndash;$15,000</span></td>
+        <td><span class="col-gd">$3,000&ndash;$20,000</span><br>Wide HK/GD gap</td>
+        <td><span class="col-ng">$500&ndash;$2,500</span></td>
+      </tr>
+      <tr>
+        <td class="metric">Healthcare<span class="cn-sub">医疗</span></td>
+        <td>Insurance-based; expensive without coverage</td>
+        <td>Public + private mix; affordable in GD, world-class in HK</td>
+        <td>Mostly out-of-pocket; limited public infrastructure</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<div class="section-rule"></div>
+
+<!-- ═══ HISTORY ═══ -->
+<section id="history">
+  <div class="section-label rv">06 &mdash; History 历史</div>
+  <h2 class="rv d1">Parallel Timelines</h2>
+  <div class="h2-cn rv d2">平行时间线</div>
+
+  <div class="history-tl rv d3">
+    <div class="tl-row">
+      <div class="tl-year">Pre-1500s</div>
+      <div class="tl-dots"><div class="conn-dot ca"></div><div class="conn-dot gd"></div><div class="conn-dot ng"></div></div>
+      <div class="tl-content">
+        <p><strong class="col-ca">California:</strong> Home to diverse Indigenous peoples &mdash; Chumash, Miwok, Tongva &mdash; for 13,000+ years.</p>
+        <p><strong class="col-gd">Guangdong:</strong> Ancient Baiyue cultures; Guangzhou (Canton) becomes a major trade port under the Han Dynasty (206 BC).</p>
+        <p><strong class="col-ng">Nigeria:</strong> Nok civilization (500 BC), Ife and Benin kingdoms produce world-renowned bronze art.</p>
+        <div class="cn-text">加州：丘马什、米沃克、通瓦等原住民在此居住超过13,000年。广东：古百越文化；广州在汉代（公元前206年）成为重要贸易港口。尼日利亚：诺克文明（公元前500年），伊费和贝宁王国创造了举世闻名的青铜艺术。</div>
+      </div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-year">1500s&ndash;1800s</div>
+      <div class="tl-dots"><div class="conn-dot ca"></div><div class="conn-dot gd"></div><div class="conn-dot ng"></div></div>
+      <div class="tl-content">
+        <p><strong class="col-ca">California:</strong> Spanish missions (1769), Mexican rule, then the Gold Rush (1848) transforms it overnight.</p>
+        <p><strong class="col-gd">Guangdong:</strong> Canton becomes China's sole trade port with the West (Canton System). Opium Wars (1839&ndash;1842) lead to Hong Kong's cession to Britain. Macau under Portuguese rule since 1557.</p>
+        <p><strong class="col-ng">Nigeria:</strong> Trans-Atlantic slave trade devastates the region. Yoruba, Hausa, and Igbo kingdoms resist and adapt. Lagos becomes a British colony (1861).</p>
+        <div class="cn-text">加州：西班牙传教（1769），墨西哥统治，然后淘金热（1848）一夜改变一切。广东：广州成为中国与西方的唯一贸易口岸（十三行制度）。鸦片战争（1839-1842）导致香港割让给英国。澳门自1557年由葡萄牙管辖。尼日利亚：跨大西洋奴隶贸易重创该地区。约鲁巴、豪萨和伊博王国抵抗与适应。拉各斯于1861年成为英国殖民地。</div>
+      </div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-year">1900s&ndash;1970s</div>
+      <div class="tl-dots"><div class="conn-dot ca"></div><div class="conn-dot gd"></div><div class="conn-dot ng"></div></div>
+      <div class="tl-content">
+        <p><strong class="col-ca">California:</strong> Hollywood born (1910s), aerospace boom (WWII), counterculture revolution (1960s), Silicon Valley seeds planted.</p>
+        <p><strong class="col-gd">Guangdong:</strong> Revolution hub (Sun Yat-sen from Guangdong), wartime devastation, Communist revolution (1949), Cultural Revolution disruption.</p>
+        <p><strong class="col-ng">Nigeria:</strong> Independence (1960), oil boom, Biafran War (1967&ndash;70), military coups reshape politics.</p>
+        <div class="cn-text">加州：好莱坞诞生（1910年代），航空航天繁荣（二战），反文化运动（1960年代），硅谷萌芽。广东：革命中心（孙中山为广东人），战争破坏，共产革命（1949），文化大革命冲击。尼日利亚：独立（1960），石油繁荣，比夫拉战争（1967-70），军事政变重塑政治格局。</div>
+      </div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-year">1980s&ndash;Now</div>
+      <div class="tl-dots"><div class="conn-dot ca"></div><div class="conn-dot gd"></div><div class="conn-dot ng"></div></div>
+      <div class="tl-content">
+        <p><strong class="col-ca">California:</strong> PC revolution, internet boom, iPhone era, AI revolution. Becomes world's 5th-largest economy.</p>
+        <p><strong class="col-gd">Guangdong:</strong> Deng Xiaoping's Special Economic Zones (Shenzhen, 1980) trigger explosive growth. Hong Kong handover (1997), Macau (1999). Greater Bay Area initiative (2019).</p>
+        <p><strong class="col-ng">Nigeria:</strong> Democratic transition (1999), mobile revolution, fintech boom, Afrobeats conquers the world, becomes Africa's largest economy (2014).</p>
+        <div class="cn-text">加州：PC革命、互联网繁荣、iPhone时代、AI革命。成为全球第五大经济体。广东：邓小平的经济特区（深圳，1980年）引发爆发式增长。香港回归（1997），澳门回归（1999）。粤港澳大湾区倡议（2019）。尼日利亚：民主转型（1999），移动革命，金融科技繁荣，Afrobeats征服世界，成为非洲最大经济体（2014）。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-rule"></div>
+
+<!-- ═══ CULTURE ═══ -->
+<section id="culture">
+  <div class="section-label rv">07 &mdash; Cultural Heritage 文化遗产</div>
+  <h2 class="rv d1">Cultural Mosaic</h2>
+  <div class="h2-cn rv d2">文化拼图</div>
+
+  <p class="rv d3" style="max-width:640px;color:var(--ink2);font-size:.95rem;">
+    Each region is a civilization in miniature &mdash; layered with languages, cuisines, art forms, and traditions that have shaped the world.
+  </p>
+  <p class="rv d3 cn" style="max-width:640px;color:var(--dim);font-size:.85rem;margin-top:.5rem;">
+    每个地区都是一个微缩文明——层叠着语言、美食、艺术形式和传统，影响了整个世界。
+  </p>
+
+  <div class="mosaic rv d4">
+    <div class="mosaic-tile ca"><span class="emoji">&#127909;</span><span class="tile-label">Hollywood</span></div>
+    <div class="mosaic-tile ca-l"><span class="emoji">&#127797;</span><span class="tile-label">Surf Culture</span></div>
+    <div class="mosaic-tile gd"><span class="emoji">&#129384;</span><span class="tile-label">Dim Sum 点心</span></div>
+    <div class="mosaic-tile gd-l"><span class="emoji">&#127900;</span><span class="tile-label">Cantonese Opera 粤剧</span></div>
+    <div class="mosaic-tile ng"><span class="emoji">&#127925;</span><span class="tile-label">Afrobeats</span></div>
+    <div class="mosaic-tile ng-l"><span class="emoji">&#128084;</span><span class="tile-label">Ankara Fashion</span></div>
+
+    <div class="mosaic-tile ca-l"><span class="emoji">&#127863;</span><span class="tile-label">Napa Wine</span></div>
+    <div class="mosaic-tile ca"><span class="emoji">&#128187;</span><span class="tile-label">Silicon Valley</span></div>
+    <div class="mosaic-tile gd-l"><span class="emoji">&#127749;</span><span class="tile-label">Victoria Harbour</span></div>
+    <div class="mosaic-tile gd"><span class="emoji">&#127922;</span><span class="tile-label">Macau Casinos</span></div>
+    <div class="mosaic-tile ng-l"><span class="emoji">&#127916;</span><span class="tile-label">Nollywood</span></div>
+    <div class="mosaic-tile ng"><span class="emoji">&#127858;</span><span class="tile-label">Jollof Rice</span></div>
+
+    <div class="mosaic-tile ca"><span class="emoji">&#128293;</span><span class="tile-label">Diverse Cuisine</span></div>
+    <div class="mosaic-tile ca-l"><span class="emoji">&#128150;</span><span class="tile-label">LGBTQ+ Rights</span></div>
+    <div class="mosaic-tile gd"><span class="emoji">&#129516;</span><span class="tile-label">Kung Fu 功夫</span></div>
+    <div class="mosaic-tile gd-l"><span class="emoji">&#127794;</span><span class="tile-label">Lingnan Gardens 岭南园林</span></div>
+    <div class="mosaic-tile ng"><span class="emoji">&#128081;</span><span class="tile-label">Yoruba Heritage</span></div>
+    <div class="mosaic-tile ng-l"><span class="emoji">&#128220;</span><span class="tile-label">Literary Giants</span></div>
+  </div>
+
+  <div class="tri" style="margin-top:40px;">
+    <div class="tri-card ca rv">
+      <span class="region-tag">California 加州</span>
+      <h3>A Culture of Reinvention</h3>
+      <p>From the Gold Rush to the Summer of Love to the iPhone launch &mdash; California's identity is constant reinvention. It is the world's dream factory: Hollywood, hip-hop's West Coast, skateboard culture, and tech utopianism. Over 200 languages are spoken.</p>
+      <div class="cn-text">从淘金热到"爱之夏"到iPhone发布——加州的身份是不断的重塑。它是世界的梦工厂：好莱坞、西海岸嘻哈、滑板文化和科技乌托邦主义。这里使用超过200种语言。</div>
+    </div>
+    <div class="tri-card gd rv d1">
+      <span class="region-tag">Guangdong 广东</span>
+      <h3>Where Tradition Meets Commerce</h3>
+      <p>Cantonese culture is China's most outward-facing: dim sum, Cantonese opera, lion dances, and Wing Chun kung fu. Hong Kong gave the world Bruce Lee, Wong Kar-wai, and Cantopop. Lingnan architecture blends Chinese and Western elements &mdash; a testament to centuries of trade.</p>
+      <div class="cn-text">粤文化是中国最外向的文化：点心、粤剧、舞狮和咏春拳。香港给世界带来了李小龙、王家卫和粤语流行乐。岭南建筑融合中西元素——数百年贸易的见证。</div>
+    </div>
+    <div class="tri-card ng rv d2">
+      <span class="region-tag">Nigeria 尼日利亚</span>
+      <h3>The Heart of African Expression</h3>
+      <p>Over 250 ethnic groups and 500+ languages. Wole Soyinka (Africa's first Nobel laureate in Literature), Chinua Achebe's <em>Things Fall Apart</em>, and Chimamanda Adichie define world literature. Afrobeats (Burna Boy, Wizkid) and Nollywood have made Nigeria a global cultural superpower.</p>
+      <div class="cn-text">超过250个民族和500多种语言。沃莱·索因卡（非洲首位诺贝尔文学奖得主）、阿切贝的《瓦解》和阿迪奇定义了世界文学。Afrobeats（Burna Boy, Wizkid）和诺莱坞使尼日利亚成为全球文化超级大国。</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-rule"></div>
+
+<!-- ═══ CONNECTIONS ═══ -->
+<section id="connections">
+  <div class="section-label rv">08 &mdash; Interconnections 互联互通</div>
+  <h2 class="rv d1">The Threads Between</h2>
+  <div class="h2-cn rv d2">连接三地的纽带</div>
+
+  <div class="conn-grid">
+    <div class="conn-card rv">
+      <div class="conn-dots"><div class="conn-dot ca"></div><div class="conn-dot gd"></div></div>
+      <h3>California &harr; Guangdong</h3>
+      <p>The oldest and deepest connection. Cantonese immigrants built the Transcontinental Railroad (1860s) and San Francisco's Chinatown. Today, the tech supply chain is inseparable: California designs, Shenzhen manufactures. Billions in trade flow through Pacific ports.</p>
+      <div class="cn-text">最古老最深厚的联系。广东移民修建了横贯大陆铁路（1860年代）和旧金山唐人街。如今科技供应链密不可分：加州设计，深圳制造。数十亿美元贸易通过太平洋港口流通。</div>
+    </div>
+    <div class="conn-card rv d1">
+      <div class="conn-dots"><div class="conn-dot gd"></div><div class="conn-dot ng"></div></div>
+      <h3>Guangdong &harr; Nigeria</h3>
+      <p>Guangzhou's "Little Africa" (Xiaobei) hosted Africa's largest overseas community in China. Nigerian traders import electronics, textiles, and machinery from the Pearl River Delta. Huawei and Transsion (Tecno, Itel) dominate Nigeria's phone market &mdash; all from Shenzhen.</p>
+      <div class="cn-text">广州的"小非洲"（小北）曾拥有非洲在中国最大的海外社区。尼日利亚商人从珠三角进口电子产品、纺织品和机械。华为和传音（Tecno、Itel）主导尼日利亚手机市场——全部来自深圳。</div>
+    </div>
+    <div class="conn-card rv d2">
+      <div class="conn-dots"><div class="conn-dot ca"></div><div class="conn-dot ng"></div></div>
+      <h3>California &harr; Nigeria</h3>
+      <p>Silicon Valley invests heavily in Nigerian fintech &mdash; Stripe's acquisition of Paystack, Y Combinator's African cohorts. The Nigerian diaspora in California is highly educated and influential. Afrobeats fills LA clubs while Hollywood collaborates with Nollywood.</p>
+      <div class="cn-text">硅谷大量投资尼日利亚金融科技——Stripe收购Paystack、Y Combinator的非洲项目。加州的尼日利亚侨民受教育程度高且有影响力。Afrobeats充满洛杉矶的俱乐部，好莱坞与诺莱坞合作。</div>
+    </div>
+    <div class="conn-card rv d3">
+      <div class="conn-dots"><div class="conn-dot ca"></div><div class="conn-dot gd"></div><div class="conn-dot ng"></div></div>
+      <h3>The Triangle: Shared Futures</h3>
+      <p>All three are hubs of youth-driven innovation. All face housing crises. All are shaping the future of AI, mobile payments, and global culture. The flow of talent, capital, and ideas between them accelerates every year &mdash; a triangle of ambition remaking the 21st century.</p>
+      <div class="cn-text">三地都是年轻人驱动创新的中心。都面临住房危机。都在塑造AI、移动支付和全球文化的未来。人才、资本和思想的流动每年都在加速——一个重塑21世纪的雄心三角。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="three-dots">
+    <div class="conn-dot ca" style="width:12px;height:12px;"></div>
+    <div class="conn-dot gd" style="width:12px;height:12px;"></div>
+    <div class="conn-dot ng" style="width:12px;height:12px;"></div>
+  </div>
+  <p>Three Regions &mdash; California &middot; Guangdong &middot; Nigeria</p>
+  <p style="margin-top:4px;" class="cn">三域对话：加州 &middot; 广东 &middot; 尼日利亚</p>
+  <p style="margin-top:8px;opacity:.5;">&copy; 2026. An open exploration.</p>
+</footer>
+
+<script>
+// ── Scroll reveal ──
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:.08});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+
+// ── Nav hide/show on scroll ──
+let lastY=0;
+const nav=document.getElementById('mainNav');
+window.addEventListener('scroll',()=>{
+  const y=window.scrollY;
+  nav.classList.toggle('hidden',y>lastY&&y>100);
+  lastY=y;
+},{passive:true});
+
+// ── Active nav link ──
+const navLinks=document.querySelectorAll('.nav-links a');
+const secs=document.querySelectorAll('section[id]');
+const navObs=new IntersectionObserver(es=>{
+  es.forEach(e=>{
+    if(e.isIntersecting){
+      navLinks.forEach(a=>a.classList.toggle('active',a.dataset.sec===e.target.id));
+    }
+  });
+},{threshold:.2,rootMargin:'-52px 0px 0px 0px'});
+secs.forEach(s=>navObs.observe(s));
+
+// ── Bar chart animation ──
+document.querySelectorAll('.bar-section').forEach(sec=>{
+  const bObs=new IntersectionObserver(es=>{
+    if(es[0].isIntersecting){
+      sec.querySelectorAll('.bar-fill').forEach(b=>{b.style.width=b.dataset.w+'%';});
+      bObs.disconnect();
+    }
+  },{threshold:.2});
+  bObs.observe(sec);
+});
+</script>
+</body>
+</html>
